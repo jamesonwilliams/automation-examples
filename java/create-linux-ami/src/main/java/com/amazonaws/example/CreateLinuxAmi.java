@@ -1,3 +1,18 @@
+/**
+ * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License").  You
+ * may not use this file except in compliance with the License.  A copy
+ * of the License is located at
+ *
+ *   http://aws.amazon.com/apache2.0/
+ *
+ * or in the "license" file accompanying this file.  This file is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the
+ * License.
+ */
 package com.amazonaws.example;
 
 import com.amazonaws.AmazonClientException;
@@ -40,6 +55,9 @@ public class CreateLinuxAmi {
 
     private static final AWSSimpleSystemsManagement SSM = getClient();
 
+    /**
+     * See -h for command line options.
+     */
     public static void main(String[] args) throws ParseException {
         CommandLine line = parseArguments(args);
 
@@ -52,6 +70,21 @@ public class CreateLinuxAmi {
         waitForResult(executionId);
     }
 
+    /**
+     * Invoke the SSM Automation service to automate the creation of a
+     * new Linux AMI.
+     *
+     * @param automationAssumeRole the ARN of the role the service will
+     *                             assume while performing actions on
+     *                             the user's behalf.
+     * @param instanceIamRole the name of the IAM role that should be
+     *                        associated with the temporary ec2 instance
+     *                        that is used for this automation.
+     * @param sourceAmiId the id of the AMI to use as a basis for
+     *                    updating.
+     *
+     * @return the id of the newly started automation job.
+     */
     private static String createLinuxAmi(
             final String automationAssumeRole,
             final String instanceIamRole,
@@ -75,6 +108,14 @@ public class CreateLinuxAmi {
         return result.getAutomationExecutionId();
     }
 
+    /**
+     * Wait for the result of the automation to be ready, and then
+     * display it.
+     *
+     * If the execution fails, then print the reason for the failure.
+     *
+     * @param executionId the id of the execution to monitor.
+     */
     private static void waitForResult(final String executionId) {
 
         final GetAutomationExecutionRequest request =
@@ -108,6 +149,14 @@ public class CreateLinuxAmi {
         }
     }
 
+    /**
+     * Check if an automation execution is finished.
+     *
+     * @param execution the automation execution to check for completion
+     *
+     * @return true if the execution is neither pending or in progress;
+     *         false, if it is.
+     */
     private static boolean isFinished(final AutomationExecution execution) {
         final AutomationExecutionStatus status = AutomationExecutionStatus.valueOf(
             execution.getAutomationExecutionStatus()
@@ -117,6 +166,12 @@ public class CreateLinuxAmi {
             !AutomationExecutionStatus.Pending.equals(status);
     }
 
+    /**
+     * Pause the thread of execution for a specified number of
+     * milliseconds.
+     *
+     * @param durationMs the number of milliseconds to sleep.
+     */
     private static void sleep(final int durationMs) {
         try {
             Thread.sleep(durationMs);
@@ -125,6 +180,11 @@ public class CreateLinuxAmi {
         }
     }
 
+    /**
+     * Get a handle the AWS SSM client.
+     *
+     * @return a handle the SSM client.
+     */
     private static AWSSimpleSystemsManagement getClient() {
         AWSSimpleSystemsManagement client =
             new AWSSimpleSystemsManagementClient(getCredentials());
@@ -135,6 +195,13 @@ public class CreateLinuxAmi {
         return client;
     }
 
+    /**
+     * Get the credentials of the user executing this program.
+     *
+     * These are pulled from ~/.aws/credentials.
+     *
+     * @return an AWS credentials object
+     */
     private static AWSCredentials getCredentials() {
         try {
             return new ProfileCredentialsProvider().getCredentials();
@@ -148,6 +215,13 @@ public class CreateLinuxAmi {
         }
     }
 
+    /**
+     * Parse the command line arguments into a command line object.
+     *
+     * @param args the string array passed into the main method
+     *
+     * @return a CommandLine object representing the passed options.
+     */
     private static CommandLine parseArguments(String[] args)
             throws ParseException {
 
@@ -173,6 +247,16 @@ public class CreateLinuxAmi {
         return parser.parse(options, args);
     }
 
+    /**
+     * Build a command line option object.
+     *
+     * @param key the command line option name
+     * @param description a description of what this option does
+     * @param argName the argument value that is associated with the
+     *                 option value; e.g. --foo=argName.
+     *
+     * @return a new Option object.
+     */
     private static Option buildOption(final String key,
             final String description, final String argName) {
 
