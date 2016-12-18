@@ -15,7 +15,7 @@
 # language governing permissions and limitations under the License.
 
 #
-# Exapmle of using the boto3 library to interact with EC2 Systems
+# Example of using the boto3 library to interact with EC2 Systems
 # Manager Automation.
 #
 # This code will automate the process of applying OS updates to a Linux
@@ -44,7 +44,7 @@ CLIENT = boto3.client('ssm')
 #   automation_assume_role - The role in the user's account that the
 #                            Automation service will assume.
 #                            
-#   instance_profile_name  - The name of the role to attach to the
+#   instance_iam_role      - The name of the role to attach to the
 #                            temporary instance used when applying
 #                            operating system updates. 
 #                            
@@ -124,7 +124,7 @@ def parse_arguments():
         "--source-ami-id",
         help="The ID of the AMI to use as a basis for updates",
         dest="source_ami_id",
-        metavar="AMI_ID",
+        metavar="SOURCE_AMI_ID",
         required=True
     )
 

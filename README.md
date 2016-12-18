@@ -44,3 +44,19 @@ Run the example:
     --source-ami-id 'ami-5ac2cd4d'
 ```
 
+## Ruby
+
+Ruby 2.0+. Uses `aws-sdk` gem:
+
+```
+gem install aws-sdk
+```
+
+Run the example:
+
+```
+./create_linux_ami.rb
+    --automation-assume-role 'arn:aws:iam::837426271803:role/AutomationRole' \
+    --instance-iam-role 'MyInstanceRole' \
+    --source-ami-id 'ami-5ac2cd4d'
+```
