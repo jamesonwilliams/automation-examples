@@ -62,9 +62,9 @@ public class CreateLinuxAmi {
         CommandLine line = parseArguments(args);
 
         final String executionId = createLinuxAmi(
-            line.buildOptionValue("automation-assume-role"),
-            line.buildOptionValue("instance-iam-role"),
-            line.buildOptionValue("source-ami-id")
+            line.getOptionValue("automation-assume-role"),
+            line.getOptionValue("instance-iam-role"),
+            line.getOptionValue("source-ami-id")
         );
 
         waitForResult(executionId);
